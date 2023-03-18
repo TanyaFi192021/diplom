@@ -1,0 +1,6 @@
+<?php
+$connect = mysqli_connect('localhost', 'root', '', 'DocInterProgram'); //подключение к базе данных
+if (!$connect)
+{
+    die('Error connect to DataBase'); //сообщение, которое выдаст система в случае неудачного подключения
+} 
