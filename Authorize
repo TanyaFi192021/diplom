@@ -1,0 +1,442 @@
+Логика авторизации для работника
+<?php
+session_start();
+require_once 'connect.php';
+
+$EmailUser = $_POST['EmailUser'];
+$PasswordUser = $_POST['PasswordUser'];
+
+$check_user = mysqli_query($connect, "SELECT * FROM `User` 
+WHERE `EmailUser` = '$EmailUser' AND `PasswordUser` = '$PasswordUser'");
+
+if(mysqli_num_rows($check_user) > 0)
+{
+    $user = mysqli_fetch_assoc($check_user);
+
+    $_SESSION['user'] = [
+        "IDUser" => $user['IDUser'],
+        "SurnameUser" => $user['SurnameUser'],
+        "NameUser" => $user['NameUser'],
+        "PatronumicUser" => $user['PatronumicUser'],
+        "PhoneNumberUser" => $user['PhoneNumberUser'],
+        "EmailUser" => $user['EmailUser'],
+        "ImageUser" => $user['ImageUser']
+    ];
+
+    header('Location: ../PageWorker.php');
+}
+else
+{
+    $_SESSION['message'] = 'Неверный логин или пароль';
+        header("Location: ../AuthorizeWorker.php");
+}
+
+Логика авторизации для поставщика
+<?php
+session_start();
+require_once 'connect.php';
+
+//данные, введенные в форму помещяем в глобальную переменную POST
+$EmailProvider = $_POST['EmailProvider'];
+$PasswordProvider = $_POST['PasswordProvider'];
+
+//проверяем совпадение почты и пароля в базе данных
+$check_provider = mysqli_query($connect, "SELECT * FROM `Provider`
+WHERE `EmailProvider` = '$EmailProvider' AND `PasswordProvider` = '$PasswordProvider'");
+
+if(mysqli_num_rows($check_provider) > 0)
+{
+    $provider = mysqli_fetch_assoc($check_provider);
+
+    $_SESSION['provider'] = [
+        "IDProvider" => $provider['IDProvider'],
+        "NameOrg" => $provider['NameOrg'],
+        "PhoneNumberProvider" => $provider['PhoneNumberProvider'],
+        "EmailProvider" => $provider['EmailProvider'],
+        "ImageProvider" => $provider['ImageProvider']
+    ];
+
+    header('Location: ../PageProvider.php'); //переходим на страницу профиля поставщика
+}
+else
+{
+    $_SESSION['message'] = 'Неверный логин или пароль'; //появляется сообщение о некорректых данных
+        header("Location: ../AuthorizeProvider.php");
+}
+
+Логика авторизации для администратора
+<?php
+session_start();
+require_once 'connect.php';
+
+$EmailAdmin = $_POST['EmailAdmin'];
+$PasswordAdmin = $_POST['PasswordAdmin'];
+
+$check_admin = mysqli_query($connect, "SELECT * FROM `Admin`
+WHERE `EmailAdmin` = '$EmailAdmin' AND `PasswordAdmin` = '$PasswordAdmin'");
+
+if(mysqli_num_rows($check_admin) > 0)
+{
+    $admin = mysqli_fetch_assoc($check_admin);
+
+    $_SESSION['admin'] = [
+        "IDAdmin" => $admin['IDAdmin'],
+        "SurnameAdmin" => $admin['SurnameAdmin'],
+        "NameAdmin" => $admin['NameAdmin'],
+        "PatronumicAdmin" => $admin['PatronumicAdmin'],
+        "EmailAdmin" => $admin['EmailAdmin'],
+        "ImageAdmin" => $admin['ImageAdmin']
+    ];
+
+    header('Location: ../PageAdmin.php');
+}
+else
+{
+    $_SESSION['message'] = 'Неверный логин или пароль';
+        header("Location: ../AuthorizeAdmin.php");
+}
+
+css файл
+/* suez-one-regular - latin */
+@font-face {
+    font-family: 'Suez One';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./fonts/suez-one-v11-latin-regular.eot'); /* IE9 Compat Modes */
+    src: local(''),
+         url('./fonts/suez-one-v11-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('./fonts/suez-one-v11-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+         url('./fonts/suez-one-v11-latin-regular.woff') format('woff'), /* Modern Browsers */
+         url('./fonts/suez-one-v11-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('./fonts/suez-one-v11-latin-regular.svg#SuezOne') format('svg'); /* Legacy iOS */
+  }
+@import url(https://fonts.google.com/specimen/Roboto);
+
+/* полоса прокрутки (скроллбар) */
+::-webkit-scrollbar {
+    width: 0.2rem; /* ширина для вертикального скролла */
+    height: 8px; /* высота для горизонтального скролла */
+    background-color: #2b2d42;
+    }
+    
+    /* ползунок скроллбара */
+    ::-webkit-scrollbar-thumb {
+    background-color: #212333;
+    border-radius: 3%;
+    }
+
+* {
+    box-sizing: border-box;
+ }
+ body {
+    background-color: rgb(147, 234, 225);
+ }
+
+ /*Шапка сайта*/
+
+header{
+    width: 100%;
+    padding: 0px 0.5% 0px 0.5%;
+    background: transparent;
+    float: left;
+}
+
+header #logo{
+    color: rgb(210, 243, 251);
+    cursor: pointer;
+}
+
+header #logo span{
+    font-size: 1.7em;
+    line-height: 45px;
+    margin-left: 40px;
+    font-family: 'Suez One', serif;
+    color: black;
+}
+
+@media (min-width: 701px)
+{
+    #logo{
+        float: left;
+        width: 30%;
+        font-size: 1.1em;
+    }
+
+    #about{
+        float: right;
+        width: 67%;
+    }
+}
+
+@media (max-width: 700px)
+{
+    #logo{
+        margin-top: 15px;
+        width: 100%;
+        font-size: 1.5em;
+    }
+}
+
+#content{
+    margin-top: 100px;
+}
+ .decor {
+    position: relative;
+    max-width: 450px;
+    margin: 30px auto 0;
+    background: white;
+    border-radius: 30px;
+    margin-top: 1000;
+ }
+ .form-inner {
+    padding: 50px;
+ }
+ .form-inner input {
+    display: block;
+    width: 100%;
+    padding: 0 20px;
+    margin-bottom: 5px;
+    background: #E9EFF6;
+    line-height: 45px;
+    border-width: 0;
+    border-radius: 10px;
+    font-family: 'Roboto', sans-serif;
+ }
+
+ .form-inner button {
+    display: block;
+    border-width: 0;
+    width: 100%;
+    padding: 0 20px;
+    margin-top: 5px;
+    background: #62b7b4;
+    border-bottom: 4px solid #42b3af;
+    line-height: 45px;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+ }
+ .form-inner button:hover {
+   background-color: #319c99;
+   border-bottom: 4px solid #20837f;
+}
+
+
+.form-inner input[type="button"] {
+    margin-top: 5px;
+    background: #62b7b4;
+    border-bottom: 4px solid #42b3af;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+ }
+ .form-inner input[type="button"]:hover {
+    background-color: #319c99;
+    border-bottom: 4px solid #20837f;
+ }
+
+ .form-inner h3 {
+    margin-top: 10px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+    color: #707981;
+ }
+ .form-inner label{
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #707981;
+ }
+
+ a{
+    text-decoration: none;
+    color: black;
+ }
+ a:visited {
+    text-decoration: none;
+ }
+ a:hover {
+    text-decoration: none;
+ }
+
+ .btn {
+    cursor: pointer;
+ }
+
+ .btn:hover {
+    background-color: #319c99;
+ }
+
+ .msg{
+    border: 2px solid #ea4117;
+    border-radius: 3px;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+ }
+ 
+ Форма авторизации для работника
+ <?php
+session_start();
+
+if($_SESSION['user'])
+{
+    header('Location: PageWorker.php');
+}
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация</title>
+    <link rel="stylesheet" href="authorize.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic|Playfair+Display:400,700&subset=latin,cyrillic">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+</head>
+<body>
+    <header>
+        <div id="logo">
+            <span><a href="MainPage.php">DocInter</a></span>
+        </div>
+    </header>
+    <div id="clear"></div><br>
+    <div id="content">
+        <form class="decor" action="vendor/signin.php" method="post">
+            <div class="circle"></div>
+            <div class="form-inner">
+            <h3>Вход</h3>
+            <label>Почта</label>
+            <input type="text" name="EmailUser" placeholder="Ваша почта" required>
+            <label>Пароль</label>
+            <input type="password" name="PasswordUser" placeholder="Ваш пароль" required><br>
+            <button type="submit">Вход</button>
+            <a href="RegistrationWorker.php"><input type="button" value="Регистрация"></a>
+            <?php
+            if($_SESSION['message'])
+            {
+                echo '<p class="msg"> '. $_SESSION['message'] .' </p>';
+            }
+            unset($_SESSION['message']);
+            ?> 
+            </div>
+        </form>
+    </div> 
+</body>
+</html>
+
+Форма авторизации для поставщика
+<?php
+session_start();
+
+if($_SESSION['provider'])
+{
+    header('Location: PageProvider.php');
+}
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация</title>
+    <link rel="stylesheet" href="authorize.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic|Playfair+Display:400,700&subset=latin,cyrillic">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+</head>
+<body>
+    <header>
+        <div id="logo">
+            <span><a href="MainPage.php">DocInter</a></span>
+        </div>
+    </header>
+    <div id="clear"></div><br>
+    <div id="content">
+        <form class="decor" action="vendor/signin1.php" method="post">
+            <div class="circle"></div>
+            <div class="form-inner">
+            <h3>Вход</h3>
+            <label>Почта</label>
+            <input type="text" name="EmailProvider" placeholder="Введите почту" required>
+            <label>Пароль</label>
+            <input type="password" name="PasswordProvider" placeholder="Введите пароль" required><br>
+            <button type="submit">Вход</button>
+            <a href="RegistrationProvider.php"><input type="button" value="Регистрация"></a>
+            <?php
+            if($_SESSION['message'])
+            {
+                echo '<p class="msg"> '. $_SESSION['message'] .' </p>';
+            }
+            unset($_SESSION['message']);
+            ?>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+Форма авторизации для администратора
+<?php
+session_start();
+
+if($_SESSION['admin'])
+{
+    header('Location: PageAdmin.php');
+}
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация</title>
+    <link rel="stylesheet" href="authorize.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic|Playfair+Display:400,700&subset=latin,cyrillic">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+</head>
+<body>
+    <header>
+        <div id="logo">
+            <span><a href="MainPage.php">DocInter</a></span>
+        </div>
+    </header>
+    <div id="clear"></div><br>
+    <div id="content">
+        <form class="decor" action="vendor/signin2.php" method="post">
+            <div class="circle"></div>
+            <div class="form-inner">
+            <h3>Вход</h3>
+            <label>Почта</label>
+            <input type="text" name="EmailAdmin" placeholder="Ваша почта" required>
+            <label>Пароль</label>
+            <input type="password" name="PasswordAdmin" placeholder="Ваш пароль" required><br>
+            <button type="submit">Вход</button>
+            <?php
+            if($_SESSION['message'])
+            {
+                echo '<p class="msg"> '. $_SESSION['message'] .' </p>';
+            }
+            unset($_SESSION['message']);
+            ?>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
