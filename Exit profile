@@ -1,0 +1,17 @@
+Логика выхода из профиля для работника
+<?php
+session_start();
+unset($_SESSION['user']);
+header('Location: ../AuthorizeWorker.php');
+
+Логика выхода из профиля для поставщика
+<?php
+session_start();
+unset($_SESSION['provider']);
+header('Location: ../AuthorizeProvider.php');
+
+Логика выхода из профиля для администратора
+<?php
+session_start();
+unset($_SESSION['admin']);
+header('Location: ../AuthorizeAdmin.php');
