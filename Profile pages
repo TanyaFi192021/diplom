@@ -1,0 +1,185 @@
+Страница профиля для работника
+<?php
+session_start();
+
+if(!$_SESSION['user'])
+{
+    header('Location: AuthorizeWorker.php');
+}
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль работника</title>
+    <link rel="stylesheet" href="generalpage.css" type="text/css">
+</head>
+<body>
+    <header>
+        <div class="container">
+          <nav id="navigation">
+            <a href="http://docinter/MainPage.php" class="logo">DocInter</a>
+              <ul class="menu-left">
+                <li><a href="http://docinter/PageWorker.php">Главная</a></li>
+                <li><a href="ArchiveWorker.php">Архив</a></li>
+                <li><a href="Provider.php">Поставщики</a></li>
+                <li><a href="ConnectionUser.php">Связь с администратором</a></li>
+              </ul>
+          </nav>
+        </div>
+      </header>
+
+      <div class="content">
+        <table>
+            <tr>
+                <td width="400"><img src="<?= $_SESSION['user']['ImageUser'] ?>" width="200"></td>
+                <td width="700" colspan="4"><h2><?= $_SESSION['user']['SurnameUser'] ?> <?= $_SESSION['user']['NameUser'] ?> <?= $_SESSION['user']['PatronumicUser'] ?></h2>
+                <p><?= $_SESSION['user']['PhoneNumberUser'] ?></p>
+                <p><?= $_SESSION['user']['EmailUser'] ?></p></td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><a href="vendor/logout.php" class="logout">Выход</a></td>
+            </tr>
+        </table>
+      </div>
+</body>
+</html>
+
+Страница профиля для поставщика
+<?php
+session_start();
+
+if(!$_SESSION['provider'])
+{
+    header('Location: AuthorizeProvider.php');
+}
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль поставщика</title>
+    <link rel="stylesheet" href="generalpage.css" type="text/css">
+</head>
+<body>
+    <header>
+        <div class="container">
+          <nav id="navigation">
+            <a href="http://docinter/MainPage.php" class="logo">DocInter</a>
+              <ul class="menu-left">
+                <li><a href="PageProvider.php">Главная</a></li>
+                <li><a href="Worker1.php">Работники</a></li>
+                <li><a href="ArchiveProvider.php">Архив</a></li>
+                <li><a href="Connection.php">Связь с администратором</a></li>
+              </ul>
+          </nav>
+        </div>
+      </header>
+
+      <div class="content">
+        <table>
+            <tr>
+                <td width="400"><img src="<?= $_SESSION['provider']['ImageProvider'] ?>" width="200"></td>
+                <td width="700" colspan="4"><h2><?= $_SESSION['provider']['NameOrg'] ?></h2>
+                <p><?= $_SESSION['provider']['PhoneNumberProvider'] ?></p>
+                <p><?= $_SESSION['provider']['EmailProvider'] ?></p></td>
+            </tr>
+
+            <tr>
+              <td><a href="CreateDocument.php"><button id="btn">Создать документ</button></a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><a href="vendor/logout1.php" class="logout">Выход</a></td>
+            </tr>
+        </table>
+      </div>
+</body>
+</html>
+
+Страница профиля для администратора
+<?php
+session_start();
+
+if(!$_SESSION['provider'])
+{
+    header('Location: AuthorizeProvider.php');
+}
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль поставщика</title>
+    <link rel="stylesheet" href="generalpage.css" type="text/css">
+</head>
+<body>
+    <header>
+        <div class="container">
+          <nav id="navigation">
+            <a href="http://docinter/MainPage.php" class="logo">DocInter</a>
+              <ul class="menu-left">
+                <li><a href="PageProvider.php">Главная</a></li>
+                <li><a href="Worker1.php">Работники</a></li>
+                <li><a href="ArchiveProvider.php">Архив</a></li>
+                <li><a href="Connection.php">Связь с администратором</a></li>
+              </ul>
+          </nav>
+        </div>
+      </header>
+
+      <div class="content">
+        <table>
+            <tr>
+                <td width="400"><img src="<?= $_SESSION['provider']['ImageProvider'] ?>" width="200"></td>
+                <td width="700" colspan="4"><h2><?= $_SESSION['provider']['NameOrg'] ?></h2>
+                <p><?= $_SESSION['provider']['PhoneNumberProvider'] ?></p>
+                <p><?= $_SESSION['provider']['EmailProvider'] ?></p></td>
+            </tr>
+
+            <tr>
+              <td><a href="CreateDocument.php"><button id="btn">Создать документ</button></a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><a href="vendor/logout1.php" class="logout">Выход</a></td>
+            </tr>
+        </table>
+      </div>
+</body>
+</html>
