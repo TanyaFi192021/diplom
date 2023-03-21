@@ -1,0 +1,174 @@
+Список поставщиков для работников
+<?php
+require_once 'vendor/connect.php';
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поставщики</title>
+    <link rel="stylesheet" href="generalpage.css" type="text/css">
+</head>
+
+<style>
+  th,td{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  td{
+    text-align: center;
+  }
+
+  .btn{
+    background-color: white;
+    line-height: 30px;
+    border-radius: 5px;
+    border-color: red;
+    cursor: pointer;
+    font-family: sans-serif;
+    font-size: 16px;
+  }
+  button:hover{
+    color: red;
+  }
+</style>
+
+<body>
+    <header>
+        <div class="container">
+          <nav id="navigation">
+            <a href="MainPage.php" class="logo">DocInter</a>
+              <ul class="menu-left">
+                <li><a href="http://docinter/PageWorker.php">Главная</a></li>
+                <li><a href="ArchiveWorker.php">Архив</a></li>
+                <li><a href="Provider.php">Поставщики</a></li>
+                <li><a href="ConnectionUser.php">Связь с администратором</a></li>
+              </ul>
+          </nav>
+        </div>
+      </header>
+
+      <div class="content">
+        <table>
+          <th></th>
+          <th>Название организации</th>
+          <th>Номер телефон</th>
+          <th>Почта</th>
+          <th></th>
+
+        <?php
+        $provider = mysqli_query($connect, "SELECT `ImageProvider`, `NameOrg`, `PhoneNumberProvider`, `EmailProvider` FROM `Provider`");
+        $provider = mysqli_fetch_all($provider);
+        foreach ($provider as $provider) {
+          ?>
+
+          <tr>
+            <td><img src="<?= $provider[0] ?>" width="100"></td>
+            <td><?= $provider[1] ?></td>
+            <td><?= $provider[2] ?></td>
+            <td><?= $provider[3] ?></td>
+            <td><a href="vendor/delete1.php?EmailProvider=<?= $provider[3] ?>"><input type="button" class="btn" value="Удалить"></input></a></td>
+            <td><a href="Update2.php?EmailProvider=<?= $provider[3] ?>"><input type="button" class="btn" value="Редактировать"></input></a></td>
+          </tr>
+
+          <?php
+        }
+        ?>
+        </table>
+      </div>
+</body>
+</html>
+
+Список поставщиков для администратора
+<?php
+require_once 'vendor/connect.php';
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поставщики</title>
+    <link rel="stylesheet" href="generalpage.css" type="text/css">
+</head>
+
+<style>
+  th,td{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  td{
+    text-align: center;
+  }
+
+  .btn{
+    background-color: white;
+    line-height: 30px;
+    border-radius: 5px;
+    border-color: red;
+    cursor: pointer;
+    font-family: sans-serif;
+    font-size: 16px;
+  }
+  button:hover{
+    color: red;
+  }
+</style>
+
+<body>
+    <header>
+        <div class="container">
+          <nav id="navigation">
+            <a href="MainPage.php" class="logo">DocInter</a>
+              <ul class="menu-left">
+                <li><a href="PageAdmin.php">Главная</a></li>
+                <li><a href="Message.php">Входящие</a></li>
+                <li><a href="Worker.php">Работники</a></li>
+                <li><a href="Provider.php">Поставщики</a></li>
+              </ul>
+          </nav>
+        </div>
+      </header>
+
+      <div class="content">
+
+        <table>
+          <th></th>
+          <th>Название организации</th>
+          <th>Номер телефон</th>
+          <th>Почта</th>
+          <th></th>
+
+        <?php
+        $provider = mysqli_query($connect, "SELECT `ImageProvider`, `NameOrg`, `PhoneNumberProvider`, `EmailProvider` FROM `Provider`");
+        $provider = mysqli_fetch_all($provider);
+        foreach ($provider as $provider) {
+          ?>
+
+          <tr>
+            <td><img src="<?= $provider[0] ?>" width="100"></td>
+            <td><?= $provider[1] ?></td>
+            <td><?= $provider[2] ?></td>
+            <td><?= $provider[3] ?></td>
+            <td><a href="vendor/delete1.php?EmailProvider=<?= $provider[3] ?>"><input type="button" class="btn" value="Удалить"></input></a></td>
+            <td><a href="Update1.php?EmailProvider=<?= $provider[3] ?>"><input type="button" class="btn" value="Редактировать"></input></a></td>
+          </tr>
+
+          <?php
+        }
+        ?>
+        </table>
+      </div>
+</body>
+</html>
