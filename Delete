@@ -1,0 +1,23 @@
+Логика удаления работников из списка для администратора
+<?php
+
+require_once 'connect.php';
+
+$EmailUser = $_GET['EmailUser'];
+
+mysqli_query($connect, "DELETE FROM User WHERE `User`.`EmailUser` = '$EmailUser'");
+
+header('Location: ../Worker.php');
+
+
+
+Логика удаления поставщиков из списка для работника и для администратора 
+<?php
+
+require_once 'connect.php';
+
+$EmailProvider = $_GET['EmailProvider'];
+
+mysqli_query($connect, "DELETE FROM Provider WHERE `Provider`.`EmailProvider` = '$EmailProvider'");
+
+header('Location: ../Provider.php');
