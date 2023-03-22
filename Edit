@@ -1,0 +1,166 @@
+Редактирование списка работников для администратора
+<?php
+
+require_once 'vendor/connect.php';
+
+$EmailUser = $_GET['EmailUser'];
+$worker = mysqli_query($connect, "SELECT * FROM `User` WHERE `EmailUser` = '$EmailUser'");
+$worker = mysqli_fetch_assoc($worker);
+
+
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактирование</title>
+    <link rel="stylesheet" href="generalpage.css" type="text/css">
+    <link rel="stylesheet" href="registr.css" type="text/css">
+</head>
+<body>
+      <form class="decor" action="vendor/update.php" method="post">
+            <div class="circle"></div>
+            <div class="form-inner">
+
+            <label>Фамилия</label>
+            <input type="text" name="SurnameUser" value="<?= $worker['SurnameUser']?>">
+            <label>Имя</label>
+            <input type="text" name="NameUser" value="<?= $worker['NameUser']?>">
+            <label>Отчество</label>
+            <input type="text" name="PatronumicUser" value="<?= $worker['PatronumicUser']?>">
+            <label>Номер телефона</label>
+            <input type="tel" name="PhoneNumberUser" value="<?= $worker['PhoneNumberUser']?>">
+            <label>Почта</label>
+            <input type="text" name="EmailUser" value="<?= $worker['EmailUser']?>">
+            <button type="submit">Сохранить</button><br>
+            <a href="PageWorker.php"><button type="submit">Отменить</button>
+            </div>
+        </form>
+</body>
+</html>
+
+Логика редактирования
+<?php
+require_once 'connect.php';
+
+
+$SurnameUser = $_POST['SurnameUser'];
+$NameUser = $_POST['NameUser'];
+$PatronumicUser = $_POST['PatronumicUser'];
+$PhoneNumberUser = $_POST['PhoneNumberUser'];
+$EmailUser = $_POST['EmailUser'];
+
+mysqli_query($connect, "UPDATE `User` SET `SurnameUser` = '$SurnameUser', `NameUser` = '$NameUser', `PatronumicUser` = '$PatronumicUser', `PhoneNumberUser` = '$PhoneNumberUser', `EmailUser` = '$EmailUser' WHERE `User`.`EmailUser` = '$EmailUser'");
+
+header ("Location: ../Worker.php");
+
+
+Редактирование списка поставщиков для работника
+<?php
+
+require_once 'vendor/connect.php';
+
+$EmailProvider = $_GET['EmailProvider'];
+$provider = mysqli_query($connect, "SELECT * FROM `Provider` WHERE `EmailProvider` = '$EmailProvider'");
+$provider = mysqli_fetch_assoc($provider);
+
+
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль работника</title>
+    <link rel="stylesheet" href="authorize.css" type="text/css">
+</head>
+<body>
+      <form class="decor" action="vendor/update2.php" method="post">
+            <div class="circle"></div>
+            <div class="form-inner">
+
+            <label>Фамилия</label>
+            <input type="text" name="NameOrg" value="<?= $provider['NameOrg']?>">
+            <label>Номер телефона</label>
+            <input type="tel" name="PhoneNumberProvider" value="<?= $provider['PhoneNumberProvider']?>">
+            <label>Почта</label>
+            <input type="text" name="EmailProvider" value="<?= $provider['EmailProvider']?>">
+            <button type="submit">Сохранить</button>
+            <a href="Provider.php"><input type="button" value="Отменить"></a>
+            </div>
+        </form>
+</body>
+</html>
+
+Логика редактирования
+<?php
+require_once 'connect.php';
+
+
+$NameOrg = $_POST['NameOrg'];
+$PhoneNumberProvider = $_POST['PhoneNumberProvider'];
+$EmailProvider = $_POST['EmailProvider'];
+
+mysqli_query($connect, "UPDATE `Provider` SET `NameOrg` = '$NameOrg', `PhoneNumberProvider` = '$PhoneNumberProvider', `EmailProvider` = '$EmailProvider' WHERE `Provider`.`EmailProvider` = '$EmailProvider'");
+
+header ("Location: ../Provider.php");
+
+Редактирование списка поставщиков для администратора
+<?php
+
+require_once 'vendor/connect.php';
+
+$EmailProvider = $_GET['EmailProvider'];
+$provider = mysqli_query($connect, "SELECT * FROM `Provider` WHERE `EmailProvider` = '$EmailProvider'");
+$provider = mysqli_fetch_assoc($provider);
+
+
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль работника</title>
+    <link rel="stylesheet" href="authorize.css" type="text/css">
+</head>
+<body>
+      <form class="decor" action="vendor/update1.php" method="post">
+            <div class="circle"></div>
+            <div class="form-inner">
+
+            <label>Фамилия</label>
+            <input type="text" name="NameOrg" value="<?= $provider['NameOrg']?>">
+            <label>Номер телефона</label>
+            <input type="tel" name="PhoneNumberProvider" value="<?= $provider['PhoneNumberProvider']?>">
+            <label>Почта</label>
+            <input type="text" name="EmailProvider" value="<?= $provider['EmailProvider']?>">
+            <button type="submit">Сохранить</button>
+            <a href="Provider1.php"><input type="button" value="Отменить"></a>
+            </div>
+        </form>
+</body>
+</html>
+
+Логика редактирования
+<?php
+require_once 'connect.php';
+
+
+$NameOrg = $_POST['NameOrg'];
+$PhoneNumberProvider = $_POST['PhoneNumberProvider'];
+$EmailProvider = $_POST['EmailProvider'];
+
+mysqli_query($connect, "UPDATE `Provider` SET `NameOrg` = '$NameOrg', `PhoneNumberProvider` = '$PhoneNumberProvider', `EmailProvider` = '$EmailProvider' WHERE `Provider`.`EmailProvider` = '$EmailProvider'");
+
+header ("Location: ../Provider1.php");
