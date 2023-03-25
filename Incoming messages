@@ -1,0 +1,118 @@
+Отображение входящих сообщений в разделе "Входящие"
+<?php
+require_once 'vendor/connect.php';
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Входящие</title>
+    <link rel="stylesheet" href="generalpage.css" type="text/css">
+</head>
+
+<style>
+  .search{
+    margin-left: 60px;
+    padding: 0 20px;
+    margin-bottom: 8px;
+    background: #E9EFF6;
+    line-height: 30px;
+    border-color: gray;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: sans-serif;
+    font-size: 16px;
+  }
+
+  h3{
+    color: red;
+  }
+  td{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+   .btn, button{
+    background-color: white;
+    line-height: 30px;
+    border-radius: 5px;
+    border-color: red;
+    cursor: pointer;
+    font-family: sans-serif;
+    font-size: 16px;
+  }
+  button:hover{
+    color: red;
+  }
+</style>
+
+<body>
+    <header>
+        <div class="container">
+          <nav id="navigation">
+            <a href="MainPage.php" class="logo">DocInter</a>
+              <ul class="menu-left">
+                <li><a href="PageAdmin.php">Главная</a></li>
+                <li><a href="Message.php">Входящие</a></li>
+                <li><a href="Worker.php">Работники</a></li>
+                <li><a href="Provider1.php">Поставщики</a></li>
+              </ul>
+          </nav>
+        </div>
+      </header>
+
+      <div class="content">
+
+        <table>
+
+        <?php
+        $message = mysqli_query($connect, "SELECT `IDMessage`, `TopicMessage`, `TypeMessage`, `TextMessage`, `SenderMessage`, `DateMessage` FROM `Message`");
+        $message = mysqli_fetch_all($message);
+        foreach ($message as $message) {
+          ?>
+
+          <tr>
+            <td><b>Тема сообщения:</b> <?= $message[1] ?><br>
+            <b>Тип сообщения:</b> <?= $message[2] ?><br>
+            <b>Текст сообщения:</b> <?= $message[3] ?><br>
+            <b>Отправитель:</b> <?= $message[4] ?><br>
+            <b>Дата отправки:</b> <?= $message[5] ?><br>
+          </td>
+            <td><a href="vendor/deleteMessage.php?IDMessage=<?= $message[0] ?>"><input type="button" class="btn" value="Удалить"></input></a></td>
+          </tr>
+
+          <?php
+        }
+        ?>
+        </table>
+
+        <table>
+        <?php
+        $mess = mysqli_query($connect, "SELECT `IDMess`, `TopicMess`, `TypeMess`, `TextMess`, `SenderMess`, `DateMess` FROM `Report`");
+        $mess = mysqli_fetch_all($mess);
+        foreach ($mess as $mess) {
+          ?>
+
+          <tr>
+            <td><b>Тема сообщения:</b> <?= $mess[1] ?><br>
+            <b>Тип сообщения:</b> <?= $mess[2] ?><br>
+            <b>Текст сообщения:</b> <?= $mess[3] ?><br>
+            <b>Отправитель:</b> <?= $mess[4] ?><br>
+            <b>Дата отправки:</b> <?= $mess[5] ?><br>
+          </td>
+            <td><a href="vendor/deleteMessageU.php?IDMess=<?= $mess[0] ?>"><input type="button" class="btn" value="Удалить"></input></a></td>
+          </tr>
+
+          <?php
+        }
+        ?>
+        </table>
+      </div>
+</body>
+</html>
