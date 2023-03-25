@@ -1,0 +1,14 @@
+Логика удаления сообщений от работников
+<?php
+require_once 'connect.php';
+$IDMess = $_GET['IDMess'];
+mysqli_query($connect, "DELETE FROM Report WHERE `Report`.`IDMess` = '$IDMess'");
+header('Location: ../Message.php');
+
+
+Логика удаления сообщений от поставщиков
+<?php
+require_once 'connect.php';
+$IDMessage = $_GET['IDMessage'];
+mysqli_query($connect, "DELETE FROM Message WHERE `Message`.`IDMessage` = '$IDMessage'");
+header('Location: ../Message.php');
