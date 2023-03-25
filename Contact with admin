@@ -1,0 +1,170 @@
+Форма сообщения для работников
+<?php
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Связь с администратором</title>
+    <link rel="stylesheet" href="registr.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic|Playfair+Display:400,700&subset=latin,cyrillic">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+</head>
+<body>
+    <header>
+        <div id="logo">
+            <span><a href="MainPage.php">DocInter</a></span>
+        </div>
+    </header>
+    <div id="clear"></div><br>
+    <div>
+        <form class="decor" action="vendor/conAdmin.php" method="post" enctype="multipart/form-data">
+            <div class="circle"></div>
+            <div class="form-inner">
+            <h3>Сообщение</h3>
+
+            <label>Тема сообщения</label>
+            <input type="text" name="TopicMess" placeholder="Введите тему сообщения">
+
+            <label>Тип сообщения</label><br>
+            <select name="TypeMess">
+                <option value="Рабочее">Рабочее</option>
+                <option value="Личное">Личное</option>
+            </select>
+
+            <label>Введите сообщение:</label>
+            <input type="textarea" name="TextMess" placeholder="Введите текст сообщения">
+
+            <label>Отправитель</label>
+            <input type="text" name="SenderMess" placeholder="Введите почту отправителя">
+
+            <label>Дата отправки</label>
+            <input type="date" name="DateMess" placeholder="Введите дату отправки">
+            <label>Почта получателя</label>
+            <input type="text" name="RecipientEmail" value="tanya.filisova@bk.ru">
+
+            <button type="submit">Отправить</button><br>
+
+            <?php
+            if($_SESSION['message'])
+            {
+                echo '<p class="msg"> '. $_SESSION['message'] .' </p>';
+            }
+            unset($_SESSION['message']);
+            ?>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+Логика отправления сообщения для работников
+<?php
+session_start();
+require_once 'connect.php';
+
+
+$TopicMess = $_POST['TopicMess'];
+$TypeMess = $_POST['TypeMess'];
+$TextMess = $_POST['TextMess'];
+$SenderMess = $_POST['SenderMess'];
+$DateMess = $_POST['DateMess'];
+$RecipientEmail = $_POST['RecipientEmail'];
+
+
+    mysqli_query($connect, "INSERT INTO `Report` (`IDMess`, `TopicMess`, `TypeMess`, `TextMess`, `SenderMess`, `DateMess`, `RecipientEamil`) VALUES (NULL, '$TopicMess', '$TypeMess', '$TextMess', '$SenderMess', '$DateMess', '$RecipientEmail')");
+
+    header("Location: ../PageWorker.php");
+?>
+
+Форма сообщения для поставщиков
+<?php
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Связь с администратором</title>
+    <link rel="stylesheet" href="registr.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic|Playfair+Display:400,700&subset=latin,cyrillic">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+</head>
+<body>
+    <header>
+        <div id="logo">
+            <span><a href="MainPage.php">DocInter</a></span>
+        </div>
+    </header>
+    <div id="clear"></div><br>
+    <div>
+        <form class="decor" action="vendor/connectAdmin.php" method="post" enctype="multipart/form-data">
+            <div class="circle"></div>
+            <div class="form-inner">
+            <h3>Сообщение</h3>
+
+            <label>Тема сообщения</label>
+            <input type="text" name="TopicMessage" placeholder="Введите тему сообщения">
+
+            <label>Тип сообщения</label><br>
+            <select name="TypeMessage">
+                <option value="Рабочее">Рабочее</option>
+                <option value="Личное">Личное</option>
+            </select>
+
+            <label>Введите сообщение:</label>
+            <input type="textarea" name="TextMessage" placeholder="Введите текст сообщения">
+
+            <label>Отправитель</label>
+            <input type="text" name="SenderMessage" placeholder="Введите отправителя">
+
+            <label>Дата отправки</label>
+            <input type="date" name="DateMessage" placeholder="Введите дату отправки">
+            <label>Почта получателя</label>
+            <input type="text" name="EmailRecipient" value="tanya.filisova@bk.ru">
+
+            <button type="submit">Отправить</button><br>
+
+            <?php
+            if($_SESSION['message'])
+            {
+                echo '<p class="msg"> '. $_SESSION['message'] .' </p>';
+            }
+            unset($_SESSION['message']);
+            ?>
+
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+Логика отправления сообщения для поставщиков
+<?php
+session_start();
+require_once 'connect.php';
+
+
+$TopicMessage = $_POST['TopicMessage'];
+$TypeMessage = $_POST['TypeMessage'];
+$TextMessage = $_POST['TextMessage'];
+$SenderMessage = $_POST['SenderMessage'];
+$DateMessage = $_POST['DateMessage'];
+$EmailRecipient = $_POST['EmailRecipient'];
+
+
+    mysqli_query($connect, "INSERT INTO `Message` (`IDMessage`, `TopicMessage`, `TypeMessage`, `TextMessage`, `SenderMessage`, `DateMessage`, `EmailRecipient`) VALUES (NULL, '$TopicMessage', '$TypeMessage', '$TextMessage', '$SenderMessage', '$DateMessage', '$EmailRecipient')");
+
+    header("Location: ../PageProvider.php");
+?>
