@@ -1,0 +1,354 @@
+Отображение списка документов для поставщиков
+<?php
+session_start();
+require_once 'vendor/connect.php';
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Архив поставщиков</title>
+    <link rel="stylesheet" href="generalpage.css" type="text/css">
+</head>
+
+<style>
+
+  .search{
+    margin-left: 60px;
+    padding: 0 20px;
+    margin-bottom: 8px;
+    background: #E9EFF6;
+    line-height: 30px;
+    border-color: gray;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: sans-serif;
+    font-size: 16px;
+  }
+
+  h3{
+    color: red;
+  }
+
+  th,td{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  th{
+    text-align: center;
+    font-size: 24px;
+  }
+  td{
+    text-align: center;
+    width: 350px;
+  }
+
+  button{
+    background-color: white;
+    line-height: 30px;
+    border-radius: 5px;
+    border-color: red;
+    cursor: pointer;
+    font-family: sans-serif;
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+   .btn{
+    display: block;
+    margin: 0 auto;
+    background-color: white;
+    line-height: 30px;
+    border-radius: 5px;
+    border-color: red;
+    cursor: pointer;
+    font-family: sans-serif;
+    font-size: 16px;
+  }
+  .btn:hover, .btn1:hover, button:hover, .btn:hover {
+    color: red;
+  }
+</style>
+
+<body>
+    <header>
+        <div class="container">
+          <nav id="navigation">
+            <a href="http://docinter/MainPage.php" class="logo">DocInter</a>
+              <ul class="menu-left">
+                <li><a href="PageProvider.php">Главная</a></li>
+                <li><a href="Worker1.php">Работники</a></li>
+                <li><a href="ArchiveProvider.php">Архив</a></li>
+                <li><a href="Connection.php">Связь с администратором</a></li>
+              </ul>
+          </nav>
+        </div>
+      </header>
+
+      <div class="content">
+
+        <form method="POST">
+          <input type="search" placeholder="Найти" name="search" class="search">
+          <button name="submit">Поиск</button>
+        </form>
+
+        <center>
+        <table>
+          <?php
+          if(isset($_POST['submit']))
+          {
+            $search = $_POST['search'];
+            $result = mysqli_query($connect, "SELECT * FROM `Document` WHERE NameDoc like '%$search%' OR NameProduct like '%$search%' OR Creater like '%$search%' OR DateCreateDoc like '%$search%' ");
+
+            if(!empty($_POST['search']))
+            {
+              if($result)
+              {
+                if(mysqli_num_rows($result) > 0)
+                {
+                  echo '
+                  <tr>
+                  <th>Название документа</th>
+                  <th>Дата создания документа</th>
+                  <th>Создатель</th>
+                  </tr>
+                  ';
+
+                  while($row = mysqli_fetch_assoc($result)){
+                  echo '
+                  <tr>
+                  <td>'.$row['NameDoc'].'</td>
+                  <td>'.$row['DateCreateDoc'].'</td>
+                  <td>'.$row['Creater'].'</td>
+                  <td><button class="btn1"><a href="DocumentView.php?ArticuleProduct='.$row['ArticuleProduct'].'">Открыть</a></button></td>
+                  </tr>
+                  ';
+                  }
+                }
+                else{
+                  echo '<br><h3>Документ не найден</h3>';
+                }
+              }
+            }
+            else{
+              echo '<br><h3>Введите запрос для поиска</h3>';
+            }
+          }
+          ?>
+
+        </table>
+      </center>
+    </div>
+
+      <div class="content">
+        <center>
+        <table>
+            <tr>
+              <th>Название документа</th>
+              <th>Дата создания</th>
+              <th>Создатель</th>
+            </tr>
+
+        <?php
+        $doc = mysqli_query($connect, "SELECT `NameDoc`, `TypeDoc`, `ArticuleProduct`, `NameProduct`, `TypeProduct`, `CostProduct`, `AmountProduct`, `DateSupply`, `AddressSupply`, `TitleProduct`, `ImageProduct`, `DateCreateDoc`, `Creater` FROM `Document`");
+        $doc = mysqli_fetch_all($doc);
+        foreach ($doc as $doc) {
+          ?>
+          <center>
+          <tr>
+            <td><a href="DocumentView.php?ArticuleProduct=<?= $doc[2] ?>"><?= $doc[0] ?></a></td>
+            <td><?= $doc[11] ?></td>
+            <td><?= $doc[12] ?></td>
+            <td><button class="btn"><a href="DocumentView.php?ArticuleProduct=<?= $doc[2] ?>">Открыть</a></button></td>
+          </tr>
+        </center>
+          <?php
+        }
+        ?>
+        </table><br>
+      </center>
+      </div>
+</body>
+</html>
+
+Отображение списка документов для работников
+<?php
+session_start();
+require_once 'vendor/connect.php';
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Архив работников</title>
+    <link rel="stylesheet" href="generalpage.css" type="text/css">
+</head>
+
+<style>
+  .search{
+    margin-left: 60px;
+    padding: 0 20px;
+    margin-bottom: 8px;
+    background: #E9EFF6;
+    line-height: 30px;
+    border-color: gray;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: sans-serif;
+    font-size: 16px;
+  }
+
+  h3{
+    color: red;
+  }
+  th,td{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  th{
+    font-size: 20px;
+  }
+  td{
+    text-align: center;
+    width: 350px;
+  }
+
+  button{
+    background-color: white;
+    line-height: 30px;
+    border-radius: 5px;
+    border-color: red;
+    cursor: pointer;
+    font-family: sans-serif;
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+   .btn{
+    display: block;
+    margin: 0 auto;
+    background-color: white;
+    line-height: 30px;
+    border-radius: 5px;
+    border-color: red;
+    cursor: pointer;
+    font-family: sans-serif;
+    font-size: 16px;
+  }
+  button:hover, .btn:hover {
+    color: red;
+  }
+</style>
+
+<body>
+    <header>
+        <div class="container">
+          <nav id="navigation">
+            <a href="http://docinter/MainPage.php" class="logo">DocInter</a>
+              <ul class="menu-left">
+                <li><a href="http://docinter/PageWorker.php">Главная</a></li>
+                <li><a href="ArchiveWorker.php">Архив</a></li>
+                <li><a href="Provider.php">Поставщики</a></li>
+                <li><a href="ConnectionUser.php">Связь с администратором</a></li>
+              </ul>
+          </nav>
+        </div>
+      </header>
+
+      <div class="content">
+
+        <form method="POST">
+          <input type="search" placeholder="Найти" name="search" class="search">
+          <button name="submit">Поиск</button>
+        </form>
+
+        <center>
+        <table>
+          <?php
+          if(isset($_POST['submit']))
+          {
+            $search = $_POST['search'];
+            $result = mysqli_query($connect, "SELECT * FROM `Archive` WHERE DocName like '%$search%' OR ProductName like '%$search%' OR Creator like '%$search%' OR SupplyDate like '%$search%' ");
+
+            if(!empty($_POST['search']))
+            {
+              if($result)
+              {
+                if(mysqli_num_rows($result) > 0)
+                {
+                  echo '
+                  <tr>
+                  <th>Название документа</th>
+                  <th>Отправитель</th>
+                  <th>Дата поставки</th>
+                  </tr>
+                  ';
+
+                  while($row = mysqli_fetch_assoc($result)){
+                  echo '
+                  <tr>
+                  <td>'.$row['DocName'].'</td>
+                  <td>'.$row['Creator'].'</td>
+                  <td>'.$row['SupplyDate'].'</td>
+                  <td><button><a href="ViewDocument.php?ProductArticule='.$row['ProductArticule'].'">Открыть</a></button></td>
+                  </tr>
+                  ';
+                  }
+                }
+                else{
+                  echo '<br><h3>Документ не найден</h3>';
+                }
+              }
+            }
+            else{
+              echo '<br><h3>Введите запрос для поиска</h3>';
+            }
+          }
+          ?>
+
+        </table>
+      </center>
+    </div>
+
+      <div class="content">
+
+        <center>
+        <table>
+            <tr>
+              <th>Название документа</th>
+              <th>Отправитель</th>
+              <th>Дата поставки</th>
+            </tr>
+
+        <?php
+        $note = mysqli_query($connect, "SELECT `DocName`, `DocType`, `ProductArticule`, `ProductName`, `ProductType`, `ProductCost`, `ProductAmount`, `SupplyDate`, `SupplyAddress`, `Description`, `ProductImage`, `CreateDate`, `Creator` FROM `Archive`");
+        $note = mysqli_fetch_all($note);
+        foreach ($note as $note) {
+          ?>
+            <tr>
+              <td><a href="ViewDocument.php?ProductArticule=<?= $note[2] ?>"><?= $note[0] ?></a></td>
+              <td><?= $note[12] ?></td>
+              <td><?= $note[7] ?></td>
+              <td><button class="btn"><a href="ViewDocument.php?ProductArticule=<?= $note[2] ?>">Открыть</a></button></td>
+            </tr>
+          <?php
+        }
+        ?>
+
+        </table>
+          </center>
+      </div>
+</body>
+</html>
