@@ -1,0 +1,112 @@
+Форма для создания документа
+<?php
+session_start();
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание</title>
+    <link rel="stylesheet" href="registr.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic|Playfair+Display:400,700&subset=latin,cyrillic">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+</head>
+<body>
+    <header>
+        <div id="logo">
+            <span><a href="MainPage.php">DocInter</a></span>
+        </div>
+    </header>
+    <div id="clear"></div><br>
+    <div>
+        <form class="decor" action="vendor/create.php" method="post" enctype="multipart/form-data">
+            <div class="circle"></div>
+            <div class="form-inner">
+            <h3>Создание документа</h3>
+
+            <label>Название документа</label>
+            <input type="text" name="NameDoc" placeholder="Введите название документа" required>
+
+            <label>Тип документа</label>
+            <input type="text" name="TypeDoc" placeholder="Введите тип документа" required>
+
+            <label>Артикул</label>
+            <input type="text" name="ArticuleProduct" placeholder="Введите артикул" required>
+
+            <label>Название продукта</label>
+            <input type="text" name="NameProduct" placeholder="Введите название продукта" required>
+
+            <label>Тип продукта</label>
+            <input type="text" name="TypeProduct" placeholder="Введите тип продукта" required>
+
+            <label>Цена</label>
+            <input type="text" name="CostProduct" placeholder="Введите цену" required>
+
+            <label>Количество продукта</label>
+            <input type="text" name="AmountProduct" placeholder="Введите кол-во поступаемого товара" required>
+
+            <label>Дата поставки</label>
+            <input type="date" name="DateSupply" placeholder="Введите дату поставки" required>
+
+            <label>Адрес поставки</label>
+            <input type="text" name="AddressSupply" placeholder="Введите адрес поставки" required>
+
+            <label>Описание</label><br>
+            <textarea type="textarea" name="TitleProduct" placeholder="Введите описание" cols="45" rows="4"></textarea><br>
+
+            <label>Картинка продукта</label>
+            <input type="file" name="ImageProduct">
+
+            <label>Дата создания</label>
+            <input type="date" name="DateCreateDoc" required>
+
+            <label>Создатель</label>
+            <input type="text" name="Creater" placeholder="Введите создателя документа" required>
+
+            <button type="submit">Создать документ</button><br>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+Логика создания документа
+<?php
+session_start();
+require_once 'connect.php';
+
+$IDDoc = $_POST['IDDoc'];
+$NameDoc = $_POST['NameDoc'];
+$TypeDoc = $_POST['TypeDoc'];
+$ArticuleProduct = $_POST['ArticuleProduct'];
+$NameProduct = $_POST['NameProduct'];
+$TypeProduct = $_POST['TypeProduct'];
+$CostProduct = $_POST['CostProduct'];
+$AmountProduct = $_POST['AmountProduct'];
+$DateSupply = $_POST['DateSupply'];
+$AddressSupply = $_POST['AddressSupply'];
+$TitleProduct = $_POST['TitleProduct'];
+$DateCreateDoc = $_POST['DateCreateDoc'];
+$Creater = $_POST['Creater'];
+
+
+$path = 'assets/' . time() . $_FILES['ImageProduct']['name'];
+if(!move_uploaded_file($_FILES['ImageProduct']['tmp_name'], '../' . $path))
+    {
+        $_SESSION['message'] = 'Ошибка при закрузке картинки';
+    }
+
+mysqli_query($connect, "INSERT INTO `Document`
+(`IDDoc`, `NameDoc`, `TypeDoc`, `ArticuleProduct`, `NameProduct`,
+`TypeProduct`, `CostProduct`, `AmountProduct`, `DateSupply`, `AddressSupply`, `TitleProduct`, `ImageProduct`, `DateCreateDoc`, `Creater`)
+VALUES (NULL, '$NameDoc', '$TypeDoc', '$ArticuleProduct', '$NameProduct', '$TypeProduct', '$CostProduct', '$AmountProduct', '$DateSupply', '$AddressSupply', '$TitleProduct', '$path', '$DateCreateDoc', '$Creater')");
+
+header("Location: ../PageProvider.php");
+
+?>
