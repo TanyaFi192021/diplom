@@ -1,0 +1,319 @@
+Отображение содержания документа в архиве работников
+<?php
+session_start();
+require_once 'vendor/connect.php';
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Архив работников</title>
+    <link rel="stylesheet" href="generalpage.css" type="text/css">
+</head>
+
+<style>
+  table{
+    border-collapse: collapse;
+  }
+
+  th,td{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  th{
+    text-align: center;
+    font-size: 24px;
+  }
+  td{
+    width: 350px;
+  }
+
+   .btn, button{
+    display: block;
+    margin: 0 auto;
+    background-color: white;
+    line-height: 30px;
+    border-radius: 5px;
+    border-color: red;
+    cursor: pointer;
+    font-family: sans-serif;
+    font-size: 16px;
+  }
+  button:hover, .btn:hover {
+    color: red;
+  }
+</style>
+
+<body>
+    <header>
+        <div class="container">
+          <nav id="navigation">
+            <a href="http://docinter/MainPage.php" class="logo">DocInter</a>
+              <ul class="menu-left">
+                <li><a href="http://docinter/PageWorker.php">Главная</a></li>
+                <li><a href="ArchiveWorker.php">Архив</a></li>
+                <li><a href="Provider.php">Поставщики</a></li>
+                <li><a href="ConnectionUser.php">Связь с администратором</a></li>
+              </ul>
+          </nav>
+        </div>
+      </header>
+
+      <div class="content">
+        <center>
+          <?php
+          $ProductArticule = $_GET['ProductArticule'];
+          $note = mysqli_query($connect, "SELECT * FROM `Archive` WHERE `ProductArticule` = '$ProductArticule'");
+          $note = mysqli_fetch_assoc($note);
+          ?>
+
+          <table border="2">
+          <th colspan="2"><?= $note['DocName'] ?></th>
+
+
+          <tr>
+            <td><b>Тип документа:</b></td>
+            <td><?= $note['DocType'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Артикул:</b></td>
+            <td><?= $note['ProductArticule'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Название продукта:</b></td>
+            <td><?= $note['ProductName'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Тип продукта:</b></td>
+            <td><?= $note['ProductType'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Цена продукта (в руб.):</b></td>
+            <td><?= $note['ProductCost'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Кол-во продукта:</b></td>
+            <td><?= $note['ProductAmount'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Дата поставки:</b></td>
+            <td><?= $note['SupplyDate'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Адрес поставки:</b></td>
+            <td><?= $note['SupplyAddress'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Описание:</b></td>
+            <td><?= $note['Description'] ?></td>
+          </tr>
+
+          <tr>
+            <td colspan="2"><img src="<?= $note['ProductImage'] ?>" width="300"></td>
+          </tr>
+
+          <tr>
+            <td><b>Дата создания документа:</b></td>
+            <td><?= $note['CreateDate'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Создатель документа:</b></td>
+            <td><?= $note['Creator'] ?></td>
+          </tr>
+
+          </table>
+
+          <table>
+
+          <tr>
+            <td><button><a href="vendor/deleteNote.php?ProductArticule=<?= $note['ProductArticule'] ?>">Удалить</a></button></td>
+            <td><button><a href="UpdateArchive.php?ProductArticule=<?= $note['ProductArticule'] ?>">Редактировать</a></button></td>
+          </tr>
+
+          <tr>
+            <td colspan="2"><button><a href="dompdf1.php?ProductArticule=<?= $note['ProductArticule'] ?>">Вывод в PDF</a></button></td>
+          </tr>
+
+          </table><br>
+
+          <?php
+
+        ?>
+
+      </center>
+      </div>
+</body>
+</html>
+
+Отображение содержания документа в архиве поставщиков
+<?php
+session_start();
+require_once 'vendor/connect.php';
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Архив поставщиков</title>
+    <link rel="stylesheet" href="generalpage.css" type="text/css">
+</head>
+
+<style>
+  table{
+    border-collapse: collapse;
+  }
+
+  th,td{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  th{
+    text-align: center;
+    font-size: 24px;
+  }
+  td{
+    width: 350px;
+  }
+
+   .btn, button{
+    display: block;
+    margin: 0 auto;
+    background-color: white;
+    line-height: 30px;
+    border-radius: 5px;
+    border-color: red;
+    cursor: pointer;
+    font-family: sans-serif;
+    font-size: 16px;
+  }
+  button:hover, .btn:hover {
+    color: red;
+  }
+</style>
+
+<body>
+    <header>
+        <div class="container">
+          <nav id="navigation">
+            <a href="http://docinter/MainPage.php" class="logo">DocInter</a>
+              <ul class="menu-left">
+                <li><a href="PageProvider.php">Главная</a></li>
+                <li><a href="Worker1.php">Работники</a></li>
+                <li><a href="ArchiveProvider.php">Архив</a></li>
+                <li><a href="Connection.php">Связь с администратором</a></li>
+              </ul>
+          </nav>
+        </div>
+      </header>
+
+      <div class="content">
+        <center>
+          <?php
+          $ArticuleProduct = $_GET['ArticuleProduct'];
+          $doc = mysqli_query($connect, "SELECT * FROM `Document` WHERE `ArticuleProduct` = '$ArticuleProduct'");
+          $doc = mysqli_fetch_assoc($doc);
+          ?>
+
+          <table border="2">
+          <th colspan="2"><?= $doc['NameDoc'] ?></th>
+
+
+          <tr>
+            <td><b>Тип документа:</b></td>
+            <td><?= $doc['TypeDoc'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Артикул:</b></td>
+            <td><?= $doc['ArticuleProduct'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Название продукта:</b></td>
+            <td><?= $doc['NameProduct'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Тип продукта:</b></td>
+            <td><?= $doc['TypeProduct'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Цена продукта (в руб.):</b></td>
+            <td><?= $doc['CostProduct'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Кол-во продукта:</b></td>
+            <td><?= $doc['AmountProduct'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Дата поставки:</b></td>
+            <td><?= $doc['DateSupply'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Адрес поставки:</b></td>
+            <td><?= $doc['AddressSupply'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Описание:</b></td>
+            <td><?= $doc['TitleProduct'] ?></td>
+          </tr>
+
+          <tr>
+            <td colspan="2"><img src="<?= $doc['ImageProduct'] ?>" width="300"></td>
+          </tr>
+
+          <tr>
+            <td><b>Дата создания документа:</b></td>
+            <td><?= $doc['DateCreateDoc'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Создатель документа:</b></td>
+            <td><?= $doc['Creater'] ?></td>
+          </tr>
+
+          </table>
+
+          <table>
+          <tr>
+            <td style="width:25px"><button><a href="UpdateDocument.php?ArticuleProduct=<?= $doc['ArticuleProduct'] ?>">Редактировать</a></button></td>
+            <td style="width:25px"><button><a href="SendToWorker.php?ArticuleProduct=<?= $doc['ArticuleProduct'] ?>">Отправить</a></button></td>
+            <td style="width:25px"><button><a href="vendor/deleteDoc.php?ArticuleProduct=<?= $doc['ArticuleProduct'] ?>">Удалить</a></button></td>
+          </tr>
+
+          <tr>
+            <td colspan="3" style="width:40px"><button><a href="dompdf.php?ArticuleProduct=<?= $doc['ArticuleProduct'] ?>">Вывод в PDF</a></button></td>
+          </tr>
+          </table><br>
+          <?php
+        ?>
+      </center>
+      </div>
+</body>
+</html>
