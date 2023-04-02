@@ -1,0 +1,10 @@
+Удаление документа из архива поставщиков
+<?php
+
+require_once 'connect.php';
+
+$ArticuleProduct = $_GET['ArticuleProduct'];
+
+mysqli_query($connect, "DELETE FROM Document WHERE `Document`.`ArticuleProduct` = '$ArticuleProduct'");
+
+header('Location: ../ArchiveProvider.php');
