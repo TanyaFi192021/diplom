@@ -1,0 +1,117 @@
+Отправка документов
+<?php
+
+require_once 'vendor/connect.php';
+
+$ArticuleProduct = $_GET['ArticuleProduct'];
+$doc = mysqli_query($connect, "SELECT * FROM `Document` WHERE `ArticuleProduct` = '$ArticuleProduct'");
+$doc = mysqli_fetch_assoc($doc);
+
+
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отправка документов</title>
+    <link rel="stylesheet" href="registr.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic|Playfair+Display:400,700&subset=latin,cyrillic">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+</head>
+<body>
+    <header>
+        <div id="logo">
+            <span><a href="MainPage.php">DocInter</a></span>
+        </div>
+    </header>
+    <div id="clear"></div><br>
+    <div>
+        <form class="decor" action="vendor/sendtoworker.php" method="post" enctype="multipart/form-data">
+            <div class="circle"></div>
+            <div class="form-inner">
+            <h3>Отправка документа документа</h3>
+
+            <label>Название документа</label>
+            <input type="text" name="NameDoc" value="<?= $doc['NameDoc']?>">
+
+            <label>Тип документа</label>
+            <input type="text" name="TypeDoc" value="<?= $doc['TypeDoc']?>">
+
+            <label>Артикул</label>
+            <input type="text" name="ArticuleProduct" value="<?= $doc['ArticuleProduct']?>">
+
+            <label>Название продукта</label>
+            <input type="text" name="NameProduct" value="<?= $doc['NameProduct']?>">
+
+            <label>Тип продукта</label>
+            <input type="text" name="TypeProduct" value="<?= $doc['TypeProduct']?>">
+
+            <label>Цена</label>
+            <input type="text" name="CostProduct" value="<?= $doc['CostProduct']?>">
+
+            <label>Количество продукта</label>
+            <input type="text" name="AmountProduct" value="<?= $doc['AmountProduct']?>">
+
+            <label>Дата поставки</label>
+            <input type="date" name="DateSupply" value="<?= $doc['DateSupply']?>">
+
+            <label>Адрес поставки</label>
+            <input type="text" name="AddressSupply" value="<?= $doc['AddressSupply']?>">
+
+            <label>Описание</label><br>
+            <textarea type="textarea" name="TitleProduct" cols="45" rows="4"><?= $doc['TitleProduct']?></textarea><br>
+
+            <label>Картинка продукта</label>
+            <input type="file" name="ImageProduct" value="<?= $doc['ImageProduct']?>">
+
+            <label>Дата создания</label>
+            <input type="date" name="DateCreateDoc" value="<?= $doc['DateCreateDoc']?>">
+
+            <label>Создатель</label>
+            <input type="text" name="Creater" value="<?= $doc['Creater']?>">
+
+            <button type="submit">Отправить документ</button>
+            <a href="ArchiveProvider.php"><input type="button" name="Back" value="Отмена">
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+Логика отправления документа
+<?php
+session_start();
+require_once 'connect.php';
+
+$IDNote = $_POST['IDDoc'];
+$DocName = $_POST['NameDoc'];
+$DocType = $_POST['TypeDoc'];
+$ProductArticule = $_POST['ArticuleProduct'];
+$ProductName = $_POST['NameProduct'];
+$ProductType = $_POST['TypeProduct'];
+$ProductCost = $_POST['CostProduct'];
+$ProductAmount = $_POST['AmountProduct'];
+$SupplyDate = $_POST['DateSupply'];
+$SupplyAddress = $_POST['AddressSupply'];
+$Description = $_POST['TitleProduct'];
+$CreateDate = $_POST['DateCreateDoc'];
+$Creator = $_POST['Creater'];
+
+
+$path = 'assets/' . time() . $_FILES['ImageProduct']['name'];
+if(!move_uploaded_file($_FILES['ImageProduct']['tmp_name'], '../' . $path))
+    {
+        $_SESSION['message'] = 'Ошибка при закрузке картинки';
+    }
+
+mysqli_query($connect, "INSERT INTO `Archive` (`IDNote`, `DocName`, `DocType`, `ProductArticule`, `ProductName`, `ProductType`, `ProductCost`, `ProductAmount`, `SupplyDate`, `SupplyAddress`, `Description`, `ProductImage`, `CreateDate`, `Creator`) VALUES (NULL, '$DocName', '$DocType', '$ProductArticule', '$ProductName', '$ProductType', '$ProductCost', '$ProductAmount', '$SupplyDate', '$SupplyAddress', '$Description', '$path', '$CreateDate', '$Creator')");
+
+header("Location: ../ArchiveProvider.php");
+
+?>
