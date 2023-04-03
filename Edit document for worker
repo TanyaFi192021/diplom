@@ -1,0 +1,118 @@
+Редактирование
+<?php
+
+require_once 'vendor/connect.php';
+
+$ProductArticule = $_GET['ProductArticule'];
+$note = mysqli_query($connect, "SELECT * FROM `Archive` WHERE `ProductArticule` = '$ProductArticule'");
+$note = mysqli_fetch_assoc($note);
+
+
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактирование документов</title>
+    <link rel="stylesheet" href="registr.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic|Playfair+Display:400,700&subset=latin,cyrillic">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+</head>
+<body>
+    <header>
+        <div id="logo">
+            <span><a href="MainPage.php">DocInter</a></span>
+        </div>
+    </header>
+    <div id="clear"></div><br>
+    <div>
+        <form class="decor" action="vendor/updateArchive.php" method="post" enctype="multipart/form-data">
+            <div class="circle"></div>
+            <div class="form-inner">
+            <h3>Редактирование документа</h3>
+
+            <label>Название документа</label>
+            <input type="text" name="DocName" value="<?= $note['DocName']?>">
+
+            <label>Тип документа</label>
+            <input type="text" name="DocType" value="<?= $note['DocType']?>">
+
+            <label>Артикул</label>
+            <input type="text" name="ProductArticule" value="<?= $note['ProductArticule']?>">
+
+            <label>Название продукта</label>
+            <input type="text" name="ProductName" value="<?= $note['ProductName']?>">
+
+            <label>Тип продукта</label>
+            <input type="text" name="ProductType" value="<?= $note['ProductType']?>">
+
+            <label>Цена</label>
+            <input type="text" name="ProductCost" value="<?= $note['ProductCost']?>">
+
+            <label>Количество продукта</label>
+            <input type="text" name="ProductAmount" value="<?= $note['ProductAmount']?>">
+
+            <label>Дата поставки</label>
+            <input type="date" name="SupplyDate" value="<?= $note['SupplyDate']?>">
+
+            <label>Адрес поставки</label>
+            <input type="text" name="SupplyAddress" value="<?= $note['SupplyAddress']?>">
+
+            <label>Описание</label><br>
+            <textarea type="textarea" name="Description" cols="45" rows="4"><?= $note['Description']?></textarea><br>
+
+            <label>Картинка продукта</label>
+            <input type="file" name="ProductImage" value="<?= $note['ProductImage']?>">
+
+            <label>Дата создания</label>
+            <input type="date" name="CreateDate" value="<?= $note['CreateDate']?>">
+
+            <label>Создатель</label>
+            <input type="text" name="Creator" value="<?= $note['Creator']?>">
+
+            <button type="submit">Изменить документ</button><br>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+Логика изменения документа
+<?php
+require_once 'connect.php';
+
+
+
+$DocName = $_POST['DocName'];
+$DocType = $_POST['DocType'];
+$ProductArticule = $_POST['ProductArticule'];
+$ProductName = $_POST['ProductName'];
+$ProductType = $_POST['ProductType'];
+$ProductCost = $_POST['ProductCost'];
+$ProductAmount = $_POST['ProductAmount'];
+$SupplyDate = $_POST['SupplyDate'];
+$SupplyAddress = $_POST['SupplyAddress'];
+$Description = $_POST['Description'];
+$CreateDate = $_POST['CreateDate'];
+$Creator = $_POST['Creator'];
+
+
+$path = 'assets/' . time() . $_FILES['ProductImage']['name'];
+    if(!move_uploaded_file($_FILES['ProductImage']['tmp_name'], '../' . $path))
+    {
+        $_SESSION['message'] = 'Ошибка при закрузке сообщения';
+        header("Location: ../UpdateArchive.php");
+    }
+
+mysqli_query($connect, "UPDATE `Archive` SET `DocName` = '$DocName', `DocType` = '$DocType', `ProductArticule` = '$ProductArticule', `ProductName` = '$ProductName', `ProductType` = '$ProductType', `ProductCost` = '$ProductCost', `ProductAmount` = '$ProductAmount', `SupplyDate` = '$SupplyDate', `SupplyAddress` = '$SupplyAddress', `Description` = '$Description', `ProductImage` = '$path', `CreateDate` = '$CreateDate', `Creator` = '$Creator' WHERE `Archive`.`ProductArticule` = '$ProductArticule'");
+
+
+
+
+header ("Location: ../ArchiveWorker.php");
