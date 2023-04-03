@@ -1,0 +1,10 @@
+Удаление документа
+<?php
+
+require_once 'connect.php';
+
+$ProductArticule = $_GET['ProductArticule'];
+
+mysqli_query($connect, "DELETE FROM Archive WHERE `Archive`.`ProductArticule` = '$ProductArticule'");
+
+header('Location: ../ArchiveWorker.php');
