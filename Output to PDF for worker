@@ -1,0 +1,147 @@
+<?php
+require "vendor/autoload.php";
+
+// reference the Dompdf namespace
+use Dompdf\Dompdf;
+
+
+$dompdf = new Dompdf();
+
+ob_start();
+require ('pdf1.php');
+$content = ob_get_clean();
+$dompdf->loadHtml($content);
+
+//$dompdf->loadHtml('bfjnfjb');
+//$content = file_get_contents('test.php');
+//$dompdf->loadHtml($content);
+
+
+// (Optional) Setup the paper size and orientation
+$dompdf->setPaper('A4', 'landscape');
+
+// Render the HTML as PDF
+$dompdf->render();
+
+// Output the generated PDF to Browser
+$dompdf->stream();
+?>
+
+Вид в pdf-файле
+<?php
+session_start();
+require_once 'vendor/connect.php';
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Документ</title>
+</head>
+
+<style>
+  body {
+  font-family: DejaVu Sans, sans-serif;
+  text-align: center;
+  }
+
+  table{
+    margin: auto;
+    border-collapse: collapse;
+  }
+
+  th,td{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  th{
+    text-align: center;
+    font-size: 14px;
+  }
+  td{
+    width: 200px;
+  }
+</style>
+
+<body>
+          <?php
+          $ProductArticule = $_GET['ProductArticule'];
+          $note = mysqli_query($connect, "SELECT * FROM `Archive` WHERE `ProductArticule` = '$ProductArticule'");
+          $note = mysqli_fetch_assoc($note);
+          ?>
+
+          <table border="2">
+            <tr>
+              <td colspan="2" style="text-align: center;"><b><?= $note['DocName'] ?></b></td>
+            </tr>
+
+          <tr>
+            <td><b>Тип документа:</b></td>
+            <td><?= $note['DocType'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Артикул:</b></td>
+            <td><?= $note['ProductArticule'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Название продукта:</b></td>
+            <td><?= $note['ProductName'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Тип продукта:</b></td>
+            <td><?= $note['ProductType'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Цена продукта (в руб.):</b></td>
+            <td><?= $note['ProductCost'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Кол-во продукта:</b></td>
+            <td><?= $note['ProductAmount'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Дата поставки:</b></td>
+            <td><?= $note['SupplyDate'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Адрес поставки:</b></td>
+            <td><?= $note['SupplyAddress'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Описание:</b></td>
+            <td><?= $note['Description'] ?></td>
+          </tr>
+
+          <tr>
+            <td colspan="2" style="text-align: center;"><img src="<?= $note['ProductImage'] ?>" width="200"></td>
+          </tr>
+
+          <tr>
+            <td><b>Дата создания документа:</b></td>
+            <td><?= $note['CreateDate'] ?></td>
+          </tr>
+
+          <tr>
+            <td><b>Создатель документа:</b></td>
+            <td><?= $note['Creator'] ?></td>
+          </tr>
+
+          </table>
+
+          <?php
+
+        ?>
+</body>
+</html>
