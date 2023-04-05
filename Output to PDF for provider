@@ -1,0 +1,144 @@
+<?php
+require "vendor/autoload.php";
+
+// reference the Dompdf namespace
+use Dompdf\Dompdf;
+
+
+$dompdf = new Dompdf();
+
+ob_start();
+require ('pdf.php');
+$content = ob_get_clean();
+$dompdf->loadHtml($content);
+
+// (Optional) Setup the paper size and orientation
+$dompdf->setPaper('A4', 'landscape');
+
+// Render the HTML as PDF
+$dompdf->render();
+
+// Output the generated PDF to Browser
+$dompdf->stream();
+?>
+
+Вид в PDF-файле
+<?php
+session_start();
+require_once 'vendor/connect.php';
+header("Content-Type: text/html; charset=UTF-8");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Документ</title>
+</head>
+
+<style>
+  body {
+  font-family: DejaVu Sans, sans-serif;
+  text-align: center;
+}
+
+  table{
+    margin: auto;
+    border-collapse: collapse;
+  }
+
+  th,td{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  th{
+    text-align: center;
+    font-size: 14px;
+  }
+  td{
+    width: 200px;
+  }
+
+
+</style>
+
+<body>
+          <?php
+          $ArticuleProduct = $_GET['ArticuleProduct'];
+          $doc = mysqli_query($connect, "SELECT * FROM `Document` WHERE `ArticuleProduct` = '$ArticuleProduct'");
+          $doc = mysqli_fetch_assoc($doc);
+          ?>
+          <center>
+          <table border="2">
+            <tr>
+              <td colspan="2" style="text-align: center;"><b><?= $doc['NameDoc'] ?></b></td>
+            </tr>
+
+            <tr>
+              <td><b>Тип документа:</b></td>
+              <td><?= $doc['TypeDoc'] ?></td>
+            </tr>
+
+            <tr>
+              <td><b>Артикул:</b></td>
+              <td><?= $doc['ArticuleProduct'] ?></td>
+            </tr>
+
+            <tr>
+              <td><b>Название продукта:</b></td>
+              <td><?= $doc['NameProduct'] ?></td>
+            </tr>
+
+            <tr>
+              <td><b>Тип продукта:</b></td>
+              <td><?= $doc['TypeProduct'] ?></td>
+            </tr>
+
+            <tr>
+              <td><b>Цена продукта (в руб.):</b></td>
+              <td><?= $doc['CostProduct'] ?></td>
+            </tr>
+
+            <tr>
+              <td><b>Кол-во продукта:</b></td>
+              <td><?= $doc['AmountProduct'] ?></td>
+            </tr>
+
+            <tr>
+              <td><b>Дата поставки:</b></td>
+              <td><?= $doc['DateSupply'] ?></td>
+            </tr>
+
+            <tr>
+              <td><b>Адрес поставки:</b></td>
+              <td><?= $doc['AddressSupply'] ?></td>
+            </tr>
+
+            <tr>
+              <td><b>Описание:</b></td>
+              <td><?= $doc['TitleProduct'] ?></td>
+            </tr>
+
+            <tr>
+              <td colspan="2" style="text-align: center;"><img src="<?= $doc['ImageProduct'] ?>" width="200"></td>
+            </tr>
+
+            <tr>
+              <td><b>Дата создания документа:</b></td>
+              <td><?= $doc['DateCreateDoc'] ?></td>
+            </tr>
+
+            <tr>
+              <td><b>Создатель документа:</b></td>
+              <td><?= $doc['Creater'] ?></td>
+            </tr>
+
+          </table>
+
+          <?php
+          ?>
+      </center>
+</body>
+</html>
