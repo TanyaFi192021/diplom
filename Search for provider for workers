@@ -1,0 +1,57 @@
+<div class="content">
+
+        <form method="POST">
+          <input type="search" placeholder="Найти" name="search" class="search">
+          <button name="submit">Поиск</button>
+        </form>
+
+        <center>
+        <table>
+          <?php
+          if(isset($_POST['submit']))
+          {
+            $search = $_POST['search'];
+            $result = mysqli_query($connect, "SELECT * FROM `Provider` WHERE NameOrg like '%$search%' OR EmailProvider like '%$search%' ");
+
+            if(!empty($_POST['search']))
+            {
+              if($result)
+              {
+                if(mysqli_num_rows($result) > 0)
+                {
+                  echo '
+                  <tr>
+                  <th></th>
+                  <th>Название организации</th>
+                  <th>Номер телефона</th>
+                  <th>Почта</th>
+                  </tr>
+                  ';
+
+                  while($row = mysqli_fetch_assoc($result)){
+                  echo '
+                  <tr>
+                  <td><img src='.$row['ImageProvider'].' width="100"></td>
+                  <td>'.$row['NameOrg'].'</td>
+                  <td>'.$row['PhoneNumberProvider'].'</td>
+                  <td>'.$row['EmailProvider'].'</td>
+                  <td><a href="vendor/delete1.php?EmailProvider='.$row['EmailProvider'].'"><input type="button" class="btn" value="Удалить"></input></a></td>
+                  <td><a href="Update2.php?EmailProvider='.$row['EmailProvider'].'"><input type="button" class="btn" value="Редактировать"></input></a></td>
+                  </tr>
+                  ';
+                  }
+                }
+                else{
+                  echo '<br><h3>Поставщик не найден</h3>';
+                }
+              }
+            }
+            else{
+              echo '<br><h3>Введите запрос для поиска</h3>';
+            }
+          }
+          ?>
+
+        </table>
+      </center>
+    </div>
