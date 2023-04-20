@@ -1,0 +1,191 @@
+Поиск и сортировка поставщиков для работников
+<span>Поиск</span>&nbsp;&nbsp;&nbsp;
+        <input type="text" name="search" class="search" id="search-text" placeholder="Найти...">
+        <br><br>
+        <div class="line"></div>
+        <br>
+
+        <?php
+        $stmt = $connect->prepare("SELECT * FROM `Provider` ORDER BY `NameOrg` asc");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        ?>
+        <center>
+          <table id="table-data">
+            <thead>
+              <th></th>
+              <th>Название организации</th>
+              <th>Номер телефона</th>
+              <th>Почта</th>
+            </thead>
+
+            <tbody>
+              <?php while($row = $result->fetch_assoc()){ ?>
+                <tr>
+                  <td><img src="<?= $row['ImageProvider']; ?>" width="100"></td>
+                  <td><?= $row['NameOrg']; ?></td>
+                  <td><?= $row['PhoneNumberProvider']; ?></td>
+                  <td><?= $row['EmailProvider']; ?></td>
+                  <td><a onclick="if (!confirm('Вы уверены, что хотите удалить поставщика <?= $row['NameOrg'] ?>?')) return false;" href="vendor/deleteProvider.php?IDProvider=<?= $row['IDProvider']; ?>"><input type="button" class="btn" value="Удалить"></input></a></td>
+                  <td><a href="UpdateProvider.php?IDProvider=<?= $row['IDProvider']; ?>"><input type="button" class="btn" value="Редактировать"></input></a></td>
+                </tr>
+              <?php } ?>
+            </tbody>
+          </table>
+        </center>
+      </div>
+
+      <script type="text/javascript">
+        $(document).ready(function(){
+          $("#search-text").keyup(function(){
+            var search = $(this).val();
+            $.ajax({
+              url:'action/actionProvider.php',
+              method:'post',
+              data:{query:search},
+              success:function(response){
+                $("#table-data").html(response);
+              }
+            });
+          });
+        });
+      </script>
+      
+      <?php
+include '../vendor/connect.php';
+$output = '';
+
+if(isset($_POST['query'])){
+	$search = $_POST['query'];
+	$stmt = $connect->prepare("SELECT * FROM `Provider` WHERE NameOrg like CONCAT('%',?,'%') OR EmailProvider like CONCAT('%',?,'%') OR PhoneNumberProvider like CONCAT('%',?,'%') ORDER BY `NameOrg` asc");
+	$stmt->bind_param("sss", $search, $search, $search);
+}
+else{
+	$stmt = $connect->prepare("SELECT * FROM `Provider` ORDER BY `NameOrg` asc");
+}
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0){
+	$output = "<thead>
+					<th></th>
+		              <th>Название организации</th>
+		              <th>Номер телефона</th>
+		              <th>Почта</th>
+				</thead>
+				<tbody>";
+			while($row = $result->fetch_assoc()){
+				$output .="
+				<tr>
+					<td><img src=".$row['ImageProvider']." width='100'></td>
+					<td>".$row['NameOrg']."</td>
+					<td>".$row['PhoneNumberProvider']."</td>
+					<td>".$row['EmailProvider']."</td>
+					<td><a href='vendor/deleteProvider.php?IDProvider=".$row['IDProvider']."'><input type='button' class='btn' value='Удалить'></input></a></td>
+					<td><a href='UpdateProvider.php?IDProvider=".$row['IDProvider']."'><input type='button' class='btn' value='Редактировать'></input></a></td>
+				</tr>
+				";
+			}
+			$output .="</tbody>";
+			echo $output;
+}
+else{
+	echo "<h3>Поставщик не найден</h3>";
+}
+?>
+
+Поиск и сортировка поставщиков для администратора
+        <span>Поиск</span>&nbsp;&nbsp;&nbsp;
+        <input type="text" name="search" class="search" id="search-text" placeholder="Найти...">
+        <br><br>
+        <div class="line"></div>
+        <br>
+
+        <?php
+        $stmt = $connect->prepare("SELECT * FROM `Provider` ORDER BY `NameOrg` asc");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        ?>
+        <center>
+          <table id="table-data">
+            <thead>
+              <th></th>
+              <th>Название организации</th>
+              <th>Номер телефона</th>
+              <th>Почта</th>
+            </thead>
+
+            <tbody>
+              <?php while($row = $result->fetch_assoc()){ ?>
+                <tr>
+                  <td><img src="<?= $row['ImageProvider']; ?>" width="100"></td>
+                  <td><?= $row['NameOrg']; ?></td>
+                  <td><?= $row['PhoneNumberProvider']; ?></td>
+                  <td><?= $row['EmailProvider']; ?></td>
+                  <td><a onclick="if (!confirm('Вы уверены, что хотите удалить поставщика <?= $row['NameOrg'] ?>?')) return false;" href="vendor/deleteProvider1.php?IDProvider=<?= $row['IDProvider']; ?>"><input type="button" class="btn" value="Удалить"></input></a></td>
+                  <td><a href="UpdateProvider1.php?IDProvider=<?= $row['IDProvider']; ?>"><input type="button" class="btn" value="Редактировать"></input></a></td>
+                </tr>
+              <?php } ?>
+            </tbody>
+          </table>
+        </center>
+          </div>
+
+          <script type="text/javascript">
+            $(document).ready(function(){
+              $("#search-text").keyup(function(){
+                var search = $(this).val();
+                $.ajax({
+                  url:'action/actionProvider1.php',
+                  method:'post',
+                  data:{query:search},
+                  success:function(response){
+                    $("#table-data").html(response);
+                  }
+                });
+              });
+            });
+          </script>
+          
+          <?php
+include '../vendor/connect.php';
+$output = '';
+
+if(isset($_POST['query'])){
+	$search = $_POST['query'];
+	$stmt = $connect->prepare("SELECT * FROM `Provider` WHERE NameOrg like CONCAT('%',?,'%') OR EmailProvider like CONCAT('%',?,'%') OR PhoneNumberProvider like CONCAT('%',?,'%') ORDER BY `NameOrg` asc");
+	$stmt->bind_param("sss", $search, $search, $search);
+}
+else{
+	$stmt = $connect->prepare("SELECT * FROM `Provider` ORDER BY `NameOrg` asc");
+}
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0){
+	$output = "<thead>
+					<th></th>
+		              <th>Название организации</th>
+		              <th>Номер телефона</th>
+		              <th>Почта</th>
+				</thead>
+				<tbody>";
+			while($row = $result->fetch_assoc()){
+				$output .="
+				<tr>
+					<td><img src=".$row['ImageProvider']." width='100'></td>
+					<td>".$row['NameOrg']."</td>
+					<td>".$row['PhoneNumberProvider']."</td>
+					<td>".$row['EmailProvider']."</td>
+					<td><a href='vendor/deleteProvider1.php?IDProvider=".$row['IDProvider']."'><input type='button' class='btn' value='Удалить'></input></a></td>
+					<td><a href='UpdateProvider1.php?IDProvider=".$row['IDProvider']."'><input type='button' class='btn' value='Редактировать'></input></a></td>
+				</tr>
+				";
+			}
+			$output .="</tbody>";
+			echo $output;
+}
+else{
+	echo "<h3>Поставщик не найден</h3>";
+}
+?>
