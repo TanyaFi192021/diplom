@@ -1,0 +1,188 @@
+Поиск и сортировка документов для работников
+<span>Поиск</span>&nbsp;&nbsp;&nbsp;
+        <input type="text" name="search" class="search" id="search-text" placeholder="Найти...">
+        <br><br>
+        <div class="line"></div>
+        <br>
+
+        <?php
+    		$stmt = $connect->prepare("SELECT * FROM `Archive` ORDER BY `SupplyDate` asc");
+    		$stmt->execute();
+    		$result = $stmt->get_result();
+
+    		?>
+    		<center>
+    			<table id="table-data">
+    				<thead>
+    					<th>Название документа</th>
+    					<th>Отправитель</th>
+    					<th>Дата поставки</th>
+    				</thead>
+
+    				<tbody>
+    					<?php while($row = $result->fetch_assoc()){ ?>
+    						<tr>
+    							<td><?= $row['DocName']; ?></td>
+    							<td><?= $row['Creator']; ?></td>
+    							<td><?= $row['SupplyDate']; ?></td>
+    							<td><button><a href="ViewDocument.php?IDNote=<?= $row['IDNote']; ?>">Открыть</a></button></td>
+    						</tr>
+    					<?php } ?>
+    				</tbody>
+    			</table>
+    		</center>
+          </div>
+
+          <script type="text/javascript">
+          	$(document).ready(function(){
+          		$("#search-text").keyup(function(){
+          			var search = $(this).val();
+          			$.ajax({
+          				url:'action/action.php',
+          				method:'post',
+          				data:{query:search},
+          				success:function(response){
+          					$("#table-data").html(response);
+          				}
+          			});
+          		});
+          	});
+          </script>
+          
+   <?php
+include '../vendor/connect.php';
+$output = '';
+
+if(isset($_POST['query'])){
+	$search = $_POST['query'];
+	$stmt = $connect->prepare("SELECT * FROM `Archive` WHERE DocName like CONCAT('%',?,'%') OR Creator like CONCAT('%',?,'%') OR SupplyDate like CONCAT('%',?,'%') ORDER BY `SupplyDate` asc");
+	$stmt->bind_param("sss", $search, $search, $search);
+}
+else{
+	$stmt = $connect->prepare("SELECT * FROM `Archive` ORDER BY `SupplyDate` asc");
+}
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0){
+	$output = "<thead>
+					<th>Название документа</th>
+					<th>Отправитель</th>
+					<th>Дата поставки</th>
+				</thead>
+				<tbody>";
+			while($row = $result->fetch_assoc()){
+				$output .="
+				<tr>
+					<td>".$row['DocName']."</td>
+					<td>".$row['Creator']."</td>
+					<td>".$row['SupplyDate']."</td>
+					<td><button><a href='ViewDocument.php?IDNote=".$row['IDNote']."'>Открыть</a></button></td>
+				</tr>
+				";
+			}
+			$output .="</tbody>";
+			echo $output;
+}
+else{
+	echo "<h3>Документ не найден</h3>";
+}
+?>
+
+Поиск и сортировка документов для поставщиков
+<span>Поиск</span>&nbsp;&nbsp;&nbsp;
+        <input type="text" name="search" class="search" id="search-text" placeholder="Найти...">
+        <br><br>
+        <div class="line"></div>
+        <br>
+        <?php
+            if($_SESSION['message'])
+            {
+                echo '<p class="msg"> '. $_SESSION['message'] .' </p>';
+            }
+            unset($_SESSION['message']);
+        ?>
+
+        <?php
+        $stmt = $connect->prepare("SELECT * FROM `Document` ORDER BY `DateCreateDoc` desc");
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        ?>
+        <center>
+          <table id="table-data">
+            <thead>
+              <th>Название документа</th>
+              <th>Дата создания</th>
+              <th>Создатель</th>
+            </thead>
+
+            <tbody>
+              <?php while($row = $result->fetch_assoc()){ ?>
+                <tr>
+                  <td><?= $row['NameDoc']; ?></td>
+                  <td><?= $row['DateCreateDoc']; ?></td>
+                  <td><?= $row['Creater']; ?></td>
+                  <td><button><a href="DocumentView.php?IDDoc=<?= $row['IDDoc']; ?>">Открыть</a></button></td>
+                </tr>
+              <?php } ?>
+            </tbody>
+          </table>
+        </center>
+          </div>
+
+          <script type="text/javascript">
+            $(document).ready(function(){
+              $("#search-text").keyup(function(){
+                var search = $(this).val();
+                $.ajax({
+                  url:'action/action1.php',
+                  method:'post',
+                  data:{query:search},
+                  success:function(response){
+                    $("#table-data").html(response);
+                  }
+                });
+              });
+            });
+          </script>
+          
+    <?php
+include '../vendor/connect.php';
+$output = '';
+
+if(isset($_POST['query'])){
+	$search = $_POST['query'];
+	$stmt = $connect->prepare("SELECT * FROM `Document` WHERE NameDoc like CONCAT('%',?,'%') OR Creater like CONCAT('%',?,'%') OR DateCreateDoc like CONCAT('%',?,'%') ORDER BY `DateCreateDoc` desc");
+	$stmt->bind_param("sss", $search, $search, $search);
+}
+else{
+	$stmt = $connect->prepare("SELECT * FROM `Document` ORDER BY `DateCreateDoc` desc");
+}
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0){
+	$output = "<thead>
+					<th>Название документа</th>
+					<th>Дата создания</th>
+					<th>Создатель</th>
+				</thead>
+				<tbody>";
+			while($row = $result->fetch_assoc()){
+				$output .="
+				<tr>
+					<td>".$row['NameDoc']."</td>
+					<td>".$row['DateCreateDoc']."</td>
+					<td>".$row['Creater']."</td>
+					<td><button><a href='DocumentView.php?IDDoc=".$row['IDDoc']."'>Открыть</a></button></td>
+				</tr>
+				";
+			}
+			$output .="</tbody>";
+			echo $output;
+}
+else{
+	echo "<h3>Документ не найден</h3>";
+}
+?>      
