@@ -1,0 +1,192 @@
+Поиск и сортировка работников для поставщика
+<?php
+        $stmt = $connect->prepare("SELECT * FROM `User` ORDER BY `SurnameUser`, `NameUser` asc");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        ?>
+        <center>
+          <table id="table-data">
+            <thead>
+              <th></th>
+              <th>Фамилия</th>
+              <th>Имя</th>
+              <th>Отчество</th>
+              <th>Номер телефона</th>
+              <th>Почта</th>
+            </thead>
+
+            <tbody>
+              <?php while($row = $result->fetch_assoc()){ ?>
+                <tr>
+                  <td><img src="<?= $row['ImageUser']; ?>" width="100"></td>
+                  <td><?= $row['SurnameUser']; ?></td>
+                  <td><?= $row['NameUser']; ?></td>
+                  <td><?= $row['PatronumicUser']; ?></td>
+                  <td><?= $row['PhoneNumberUser']; ?></td>
+                  <td><?= $row['EmailUser']; ?></td>
+                  <td><a onclick="if (!confirm('Вы уверены, что хотите удалить работника <?= $row['SurnameUser'] ?> <?= $row['NameUser'] ?> <?= $row['PatronumicUser'] ?>?')) return false;" href="vendor/deleteWorker.php?IDUser=<?= $row['IDUser']; ?>"><input type="button" class="btn" value="Удалить"></input></a>
+                  <a href="UpdateWorker.php?IDUser=<?= $row['IDUser']; ?>"><input type="button" class="btn" value="Редактировать"></input></a></td>
+                </tr>
+              <?php } ?>
+            </tbody>
+          </table>
+        </center>
+          </div>
+
+          <script type="text/javascript">
+            $(document).ready(function(){
+              $("#search-text").keyup(function(){
+                var search = $(this).val();
+                $.ajax({
+                  url:'action/actionWorker.php',
+                  method:'post',
+                  data:{query:search},
+                  success:function(response){
+                    $("#table-data").html(response);
+                  }
+                });
+              });
+            });
+          </script>
+          
+   <?php
+include '../vendor/connect.php';
+$output = '';
+
+if(isset($_POST['query'])){
+	$search = $_POST['query'];
+	$stmt = $connect->prepare("SELECT * FROM `User` WHERE SurnameUser like CONCAT('%',?,'%') OR NameUser like CONCAT('%',?,'%') OR PatronumicUser like CONCAT('%',?,'%') ORDER BY `SurnameUser`, `NameUser` asc");
+	$stmt->bind_param("sss", $search, $search, $search);
+}
+else{
+	$stmt = $connect->prepare("SELECT * FROM `User` ORDER BY `SurnameUser`, `NameUser` asc");
+}
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0){
+	$output = "<thead>
+					<th></th>
+		            <th>Фамилия</th>
+		            <th>Имя</th>
+		            <th>Отчество</th>
+		            <th>Номер телефона</th>
+		            <th>Почта</th>
+				</thead>
+				<tbody>";
+			while($row = $result->fetch_assoc()){
+				$output .="
+				<tr>
+					<td><img src=".$row['ImageUser']." width='100'></td>
+					<td>".$row['SurnameUser']."</td>
+					<td>".$row['NameUser']."</td>
+					<td>".$row['PatronumicUser']."</td>
+					<td>".$row['PhoneNumberUser']."</td>
+					<td>".$row['EmailUser']."</td>
+					<td><a href='vendor/deleteWorker.php?IDUser=".$row['IDUser']."'><input type='button' class='btn' value='Удалить'></input></a>
+					<a href='UpdateWorker.php?IDUser=".$row['IDUser']."'><input type='button' class='btn' value='Редактировать'></input></a></td>
+				</tr>
+				";
+			}
+			$output .="</tbody>";
+			echo $output;
+}
+else{
+	echo "<h3>Работник не найден</h3>";
+}
+?>
+
+Поиск и сортировка работников для администратора
+<?php
+        $stmt = $connect->prepare("SELECT * FROM `User` ORDER BY `SurnameUser`, `NameUser` asc");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        ?>
+        <center>
+          <table id="table-data">
+            <thead>
+              <th></th>
+              <th>Фамилия</th>
+              <th>Имя</th>
+              <th>Отчество</th>
+              <th>Номер телефона</th>
+              <th>Почта</th>
+            </thead>
+
+            <tbody>
+              <?php while($row = $result->fetch_assoc()){ ?>
+                <tr>
+                  <td><img src="<?= $row['ImageUser']; ?>" width="100"></td>
+                  <td><?= $row['SurnameUser']; ?></td>
+                  <td><?= $row['NameUser']; ?></td>
+                  <td><?= $row['PatronumicUser']; ?></td>
+                  <td><?= $row['PhoneNumberUser']; ?></td>
+                  <td><?= $row['EmailUser']; ?></td>
+                </tr>
+              <?php } ?>
+            </tbody>
+          </table>
+        </center>
+          </div>
+
+          <script type="text/javascript">
+            $(document).ready(function(){
+              $("#search-text").keyup(function(){
+                var search = $(this).val();
+                $.ajax({
+                  url:'action/actionWorker1.php',
+                  method:'post',
+                  data:{query:search},
+                  success:function(response){
+                    $("#table-data").html(response);
+                  }
+                });
+              });
+            });
+          </script>
+    
+    <?php
+include '../vendor/connect.php';
+$output = '';
+
+if(isset($_POST['query'])){
+	$search = $_POST['query'];
+	$stmt = $connect->prepare("SELECT * FROM `User` WHERE SurnameUser like CONCAT('%',?,'%') OR NameUser like CONCAT('%',?,'%') OR PatronumicUser like CONCAT('%',?,'%') ORDER BY `SurnameUser`, `NameUser` asc");
+	$stmt->bind_param("sss", $search, $search, $search);
+}
+else{
+	$stmt = $connect->prepare("SELECT * FROM `User` ORDER BY `SurnameUser`, `NameUser` asc");
+}
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0){
+	$output = "<thead>
+					<th></th>
+		            <th>Фамилия</th>
+		            <th>Имя</th>
+		            <th>Отчество</th>
+		            <th>Номер телефона</th>
+		            <th>Почта</th>
+				</thead>
+				<tbody>";
+			while($row = $result->fetch_assoc()){
+				$output .="
+				<tr>
+					<td><img src=".$row['ImageUser']." width='100'></td>
+					<td>".$row['SurnameUser']."</td>
+					<td>".$row['NameUser']."</td>
+					<td>".$row['PatronumicUser']."</td>
+					<td>".$row['PhoneNumberUser']."</td>
+					<td>".$row['EmailUser']."</td>
+				</tr>
+				";
+			}
+			$output .="</tbody>";
+			echo $output;
+}
+else{
+	echo "<h3>Работник не найден</h3>";
+}
+?>
+   
